@@ -1,7 +1,7 @@
 // src/components/RouteFinder.jsx
 import React, { useContext, useCallback } from 'react';
 import { AppStateContext } from '../context/AppStateContext';
-// import { mockApi } from '../utils/api';
+import { mockApi } from '../utils/api';
 // import Controls from './panels/Controls';
 // import MapView from './panels/MapView';
 // import StatusBar from './panels/StatusBar';
@@ -11,20 +11,20 @@ import styles from '../styles/RouteFinder.module.css';
 const RouteFinder = () => {
   const { searchParams, setSearchStatus, setErrorMessage, setRoutes, setSelectedRouteId } = useContext(AppStateContext);
 
-  // const handleFindRoutes = useCallback(async () => {
-  //   setSearchStatus('pending');
-  //   setRoutes([]);
-  //   setSelectedRouteId(null);
-  //   setErrorMessage('');
-  //   try {
-  //     const result = await mockApi.findRoutes(searchParams);
-  //     setRoutes(result.routes);
-  //     setSearchStatus('success');
-  //   } catch (error) {
-  //     setErrorMessage(error.message);
-  //     setSearchStatus('error');
-  //   }
-  // }, [searchParams, setSearchStatus, setRoutes, setSelectedRouteId, setErrorMessage]);
+  const handleFindRoutes = useCallback(async () => {
+    setSearchStatus('pending');
+    setRoutes([]);
+    setSelectedRouteId(null);
+    setErrorMessage('');
+    try {
+      const result = await mockApi.findRoutes(searchParams);
+      setRoutes(result.routes);
+      setSearchStatus('success');
+    } catch (error) {
+      setErrorMessage(error.message);
+      setSearchStatus('error');
+    }
+  }, [searchParams, setSearchStatus, setRoutes, setSelectedRouteId, setErrorMessage]);
 
   return (
     <div className={styles.container}>
