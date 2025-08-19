@@ -1,0 +1,8 @@
+/* src/styles/global.css */
+
+/* this is only imported as an example.  For an actual app, remove the home 
+import and include all other component stylesheets for reference */
+
+@import './Home.css';
+@import './RouteFinder.module.css';
+

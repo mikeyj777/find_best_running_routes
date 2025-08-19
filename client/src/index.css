@@ -1,0 +1,32 @@
+/* src/index.css */
+:root {
+  --primary-bg: #1a1a1c;
+  --secondary-bg: #2b2d31;
+  --tertiary-bg: #383a40;
+  --border-color: #4b4d53;
+  --primary-text: #e6e6e6;
+  --secondary-text: #a0a0a0;
+  --accent-blue: #007bff;
+  --accent-green: #28a745;
+  --accent-red: #dc3545;
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Style for leaflet map background */
+.leaflet-container {
+    background: var(--tertiary-bg);
+}
