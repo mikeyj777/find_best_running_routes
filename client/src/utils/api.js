@@ -1,42 +1,35 @@
 // src/utils/api.js
 
+// The base URL of your running Flask server
+const API_BASE_URL = 'http://localhost:5000'; 
+
 /**
- * Mocks a backend API call to find routes.
- * @param {object} searchParams - The search parameters from the UI.
- * @returns {Promise<object>} - A promise that resolves with the simulated route data.
+ * Calls the backend to fetch elevation data for a given path.
+ * @param {Array<{lat: number, lng: number}>} path - The path to get elevation for.
+ * @returns {Promise<object>} - A promise that resolves to the API response.
  */
-export const mockApi = {
-  findRoutes: async (searchParams) => {
-    console.log("Mock API called with:", searchParams);
+export const getElevationForPath = async (path) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/find-routes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // Send the path in the JSON body, as the backend expects
+      body: JSON.stringify({ path }), 
+    });
 
-    // Simulate network delay to mimic a real API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Simulate a random chance of the search failing
-    if (Math.random() < 0.2) {
-      throw new Error("No routes found in this area.");
+    // Handle non-200 responses
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
     }
 
-    // If the search succeeds, generate some mock route data
-    const num_routes = Math.floor(Math.random() * 5) + 2; // Generate 2 to 6 routes
-    const routes = [];
-    for (let i = 1; i <= num_routes; i++) {
-      const { origin, pathDistance } = searchParams;
-      const path = [];
-      // Create a path with 20 coordinate points
-      for (let j = 0; j < 20; j++) {
-        const step = j / 19;
-        // Add some random deviation to make the path look more natural
-        const lat_offset = (Math.random() - 0.5) * 0.01 * pathDistance;
-        const lng_offset = (Math.random() - 0.5) * 0.01 * pathDistance;
-        path.push({
-          lat: origin.lat + (step * 0.01 * pathDistance) + lat_offset,
-          lng: origin.lng + (step * 0.01 * pathDistance) + lng_offset,
-        });
-      }
-      routes.push({ id: i, path });
-    }
-    
-    return { routes };
+    return await response.json();
+
+  } catch (error) {
+    console.error("Error fetching elevation:", error);
+    // Re-throw the error so the component can catch it and update the UI
+    throw error; 
   }
 };

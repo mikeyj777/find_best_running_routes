@@ -1,0 +1,5 @@
+/* src/styles/MapView.module.css */
+.mapContainer {
+  height: 100%;
+  width: 100%;
+}
