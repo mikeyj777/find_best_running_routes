@@ -1,6 +1,6 @@
 import logging
 
-from core.road_networks import OSMConnector, build_road_graph
+from core.road_network import OSMConnector, build_road_graph
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
