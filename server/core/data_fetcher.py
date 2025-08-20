@@ -2,6 +2,7 @@
 import requests
 import json
 import logging
+import time
 
 # --- NEW HELPER FUNCTION ---
 def process_elevation_request(request_data):
@@ -52,44 +53,64 @@ def process_elevation_request(request_data):
 class ElevationConnector:
     """
     A class to connect to the Open-Elevation API and fetch elevation data.
+    Includes logic to automatically batch large requests.
     """
     
-    def __init__(self):
+    def __init__(self, batch_size=1000):
         """
-        Initializes the connector with the API endpoint URL.
+        Initializes the connector with the API endpoint URL and a batch size.
         """
         self.api_url = "https://api.open-elevation.com/api/v1/lookup"
         self.headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
+        self.batch_size = batch_size
 
     def fetch_elevation_for_coords(self, coordinates):
         """
-        Fetches elevation data for a list of coordinate dictionaries.
+        Fetches elevation data for a list of coordinates, automatically handling batching.
         """
         if not coordinates:
             logging.error("Error: No coordinates provided to ElevationConnector.")
             return None
 
-        payload = {"locations": coordinates}
+        all_results = []
+        
+        # Split the coordinates into smaller chunks (batches)
+        for i in range(0, len(coordinates), self.batch_size):
+            batch = coordinates[i:i + self.batch_size]
+            logging.info(f"Fetching batch {i // self.batch_size + 1} of {len(coordinates) // self.batch_size + 1}...")
+            
+            payload = {"locations": batch}
 
-        try:
-            response = requests.post(
-                self.api_url, 
-                headers=self.headers, 
-                data=json.dumps(payload)
-            )
-            response.raise_for_status()
-            data = response.json()
-            return data.get('results', [])
+            try:
+                response = requests.post(
+                    self.api_url, 
+                    headers=self.headers, 
+                    data=json.dumps(payload)
+                )
+                response.raise_for_status()
+                data = response.json()
+                
+                batch_results = data.get('results', [])
+                if batch_results:
+                    logging.info(f"Batch {i // self.batch_size + 1} fetched successfully.")
+                    all_results.extend(batch_results)
+                
+                # Be a good citizen and pause briefly between requests
+                time.sleep(1)
 
-        except requests.exceptions.HTTPError as http_err:
-            logging.error(f"HTTP error occurred: {http_err} - {response.text}")
-            return None
-        except requests.exceptions.RequestException as req_err:
-            logging.error(f"An error occurred during the request: {req_err}")
-            return None
-        except json.JSONDecodeError:
-            logging.error("Error: Failed to decode JSON from response.")
-            return None
+            except requests.exceptions.HTTPError as http_err:
+                logging.error(f"HTTP error on batch: {http_err} - {response.text}")
+                # Decide if you want to stop or continue on a failed batch
+                # For now, we'll stop and return what we have so far.
+                return all_results if all_results else None
+            except requests.exceptions.RequestException as req_err:
+                logging.error(f"Request error on batch: {req_err}")
+                return all_results if all_results else None
+            except json.JSONDecodeError:
+                logging.error("Error decoding JSON from response on batch.")
+                return all_results if all_results else None
+        
+        return all_results
