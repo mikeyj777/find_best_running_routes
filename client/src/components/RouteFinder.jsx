@@ -1,8 +1,8 @@
 // src/components/RouteFinder.jsx
 import React, { useContext, useCallback } from 'react';
 import { AppStateContext } from '../context/AppStateContext';
-import { getElevationForPath } from '../utils/api';
-import { haversineDistance } from '../utils/geoUtils'; 
+import { findRoutes } from '../utils/api'; // Import the final api function
+import { processRouteForElevation } from '../utils/geoUtils'; // To process the results
 import Controls from './panels/Controls';
 import MapView from './panels/MapView';
 import StatusBar from './panels/StatusBar';
@@ -10,7 +10,7 @@ import ElevationProfile from './panels/ElevationProfile';
 import styles from '../styles/RouteFinder.module.css';
 
 const RouteFinder = () => {
-  const { setSearchStatus, setErrorMessage, setRoutes, setSelectedRouteId } = useContext(AppStateContext);
+  const { searchParams, setSearchStatus, setErrorMessage, setRoutes, setSelectedRouteId } = useContext(AppStateContext);
 
   const handleFindRoutes = useCallback(async () => {
     setSearchStatus('pending');
@@ -18,48 +18,26 @@ const RouteFinder = () => {
     setSelectedRouteId(null);
     setErrorMessage('');
     try {
-      const testPath = [
-        { lat: 36.512916, lng: -82.531524 },
-        { lat: 36.520000, lng: -82.540000 },
-        { lat: 36.530000, lng: -82.550000 },
-        { lat: 36.540000, lng: -82.560000 }
-      ];
-
-      const result = await getElevationForPath(testPath);
+      // 1. Call the final backend endpoint with the user's search parameters
+      const result = await findRoutes(searchParams);
       
       console.log("Response from backend:", result);
 
-      let cumulativeDistance = 0;
-      // The backend response uses 'latitude'/'longitude', so we need a slightly different processor here
-      const processedProfile = result.elevationProfile.map((point, index) => {
-        if (index > 0) {
-          const prevPoint = result.elevationProfile[index - 1];
-          // haversineDistance expects {lat, lng}, so we need to map the keys
-          cumulativeDistance += haversineDistance(
-            { lat: prevPoint.latitude, lng: prevPoint.longitude },
-            { lat: point.latitude, lng: point.longitude }
-          );
-        }
-        return {
-          distance: cumulativeDistance,
-          elevation: point.elevation * 3.28084 
-        };
-      });
+      // 2. Process the results: The backend sends paths, the frontend creates the elevation profiles for charting
+      const routesWithProfiles = result.routes.map(route => ({
+        ...route,
+        elevationProfile: processRouteForElevation(route.path)
+      }));
 
-      const finalRoute = {
-          id: 1,
-          path: testPath,
-          elevationProfile: processedProfile
-      };
-
-      setRoutes([finalRoute]);
+      // 3. Update the global state with the final, processed routes
+      setRoutes(routesWithProfiles);
       setSearchStatus('success');
 
     } catch (error) {
       setErrorMessage(error.message);
       setSearchStatus('error');
     }
-  }, [setSearchStatus, setRoutes, setSelectedRouteId, setErrorMessage]);
+  }, [searchParams, setSearchStatus, setRoutes, setSelectedRouteId, setErrorMessage]);
 
   return (
     <div className={styles.container}>
