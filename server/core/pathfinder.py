@@ -34,32 +34,62 @@ class PathfindingEngine:
         return self._format_routes()
 
     def _traverse(self, path, current_distance):
+        """
+        A greedy traversal function that prioritizes segments whose incline
+        is closest to the target incline.
+        """
+        # Stop searching if we have enough routes
         if len(self.found_routes) >= self.max_routes_to_find:
             return
 
         last_node_id = path[-1]
-        neighbors = list(self.graph.neighbors(last_node_id))
-        random.shuffle(neighbors)
+        
+        best_neighbor = None
+        lowest_cost = float('inf')
 
-        for neighbor_id in neighbors:
+        # Look at all possible next steps from the current node
+        for neighbor_id in self.graph.neighbors(last_node_id):
+            # Don't immediately go back on the same path
             if len(path) > 1 and neighbor_id == path[-2]:
-                continue # Avoid immediate back-and-forth steps
+                continue
 
-            segment_distance = self.graph[last_node_id][neighbor_id]['weight']
+            # --- Calculate the "cost" of this potential segment ---
+            node1_data = self.graph.nodes[last_node_id]
+            node2_data = self.graph.nodes[neighbor_id]
+            
+            if 'elevation' not in node1_data or 'elevation' not in node2_data:
+                continue
+
+            rise_m = node2_data['elevation'] - node1_data['elevation']
+            run_m = self.graph[last_node_id][neighbor_id]['weight'] * 1609.34
+            
+            if run_m == 0: continue
+            
+            segment_incline = (rise_m / run_m) * 100
+            
+            # The cost is how much the segment's incline deviates from our target.
+            # Squaring it heavily penalizes large deviations.
+            cost = (segment_incline - self.params.get('optimalIncline', 2.0))**2
+            
+            # Keep track of the neighbor with the lowest cost (the best option)
+            if cost < lowest_cost:
+                lowest_cost = cost
+                best_neighbor = neighbor_id
+
+        # If we found a best next step, proceed down that path
+        if best_neighbor:
+            segment_distance = self.graph[last_node_id][best_neighbor]['weight']
             new_distance = current_distance + segment_distance
-            new_path = path + [neighbor_id]
-
-            is_valid, message = self._is_path_valid(new_path)
-
-            if not is_valid:
-                print(f"Path invalid: {message}")
-
+            new_path = path + [best_neighbor]
+            
+            # We still validate the entire path to ensure its overall average is good
+            is_valid, _ = self._is_path_valid(new_path)
             if is_valid:
                 if new_distance >= self.target_distance:
+                    # Success: The path is long enough and valid
                     self.found_routes.append(new_path)
-                    if len(self.found_routes) >= self.max_routes_to_find:
-                        return
                 else:
+                    # The path is good so far, but not long enough. Continue searching.
                     self._traverse(path=new_path, current_distance=new_distance)
 
     def _is_path_valid(self, path):
