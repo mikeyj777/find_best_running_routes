@@ -99,7 +99,7 @@ class ElevationConnector:
                     all_results.extend(batch_results)
                 
                 # Be a good citizen and pause briefly between requests
-                time.sleep(1)
+                time.sleep(0.1)
 
             except requests.exceptions.HTTPError as http_err:
                 logging.error(f"HTTP error on batch: {http_err} - {response.text}")

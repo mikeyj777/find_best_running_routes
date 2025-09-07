@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AppStateProvider, AppStateContext } from './context/AppStateContext';
 import Home from './components/Home';
 import RouteFinder from './components/RouteFinder';
+import ElevationDataViewer from './components/ElevationDataViewer';
 import './index.css'; // Assuming you moved global styles here
 import './styles/global.css'; // Import global styles
 
@@ -45,6 +46,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/routes" element={<RouteFinder />} />
+            <Route path="/viewer" element={< ElevationDataViewer />} />
           </Routes>
         </AppLoader>
       </Router>
