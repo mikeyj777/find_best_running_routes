@@ -13,7 +13,7 @@ class LocalElevationConnector:
     def __init__(
         self,
         cached_elevation_location_csv=None,
-        tolerance_ft=50.0
+        tolerance_ft=100.0
     ):
         self.cached_elevation_location = (
             cached_elevation_location_csv

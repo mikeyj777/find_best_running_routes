@@ -17,11 +17,12 @@ import unittest
 from dataclasses import asdict
 from pathlib import Path
 
-from core.local_elevation import LocalElevationConnector
-
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+
+from core.local_elevation import LocalElevationConnector
+from utils import consts
 
 import networkx as nx
 from core.incline_analyzer import (InclineSpec, evaluate_profile, evaluate_route,
@@ -253,9 +254,52 @@ class ReportTests(unittest.TestCase):
         self.assertEqual(report['failed_sections'][0]['road'], 'Moreland Drive')
         self.assertEqual(report['failed_sections'][0]['overall_grade_pct'], 5.0)
 
+def get_elevations_on_path(graph, nodes, lat_long_on_path):
+    from core.data_fetcher import ElevationConnector
+    
+    lec = LocalElevationConnector(tolerance_ft=100.0)
+
+    lat_long_needed = lec.filter_lat_long_return_missing_coords(
+        lat_long_on_path
+    )
+
+    # Get cached elevations for coordinates within tolerance
+    elevation_data = lec.match_results[
+        lec.match_results["within_tolerance"]
+    ][["latitude", "longitude", "elevation"]].to_dict(orient="records")
+
+    # Fetch only coordinates missing from the local cache
+    # if len(lat_long_needed) > 0:
+    #     with ElevationConnector(
+    #         batch_size=args.batch_size,
+    #         api_key=os.environ.get("OPEN_ELEVATION_API_KEY")
+    #     ) as ec:
+    #         results = ec.fetch_elevation_for_coords(lat_long_needed)
+
+    #     elevation_data.extend(results)
+
+    print(f"Total road coordinates: {len(lat_long_on_path):,}")
+    print(f"Cached elevations: {len(elevation_data) - len(lat_long_needed):,}")
+    print(f"API elevations requested: {len(lat_long_needed):,}")
+    
+    elevation_lookup = {
+        (r["latitude"], r["longitude"]): float(r["elevation"])
+        for r in elevation_data
+    }
+
+    elevations = {
+        n: elevation_lookup[
+            (position(graph, n)[0], position(graph, n)[1])
+        ]
+        for n in nodes
+    }
+    
+    elevation_on_path = {n:float(r['elevation']) for n,r in zip(nodes, elevations)}
+    
+    return elevation_on_path
+
 def live_probes(args):
     from core.road_network import OSMConnector
-    from core.data_fetcher import ElevationConnector
 
     spec = InclineSpec(min_distance_miles=args.min_miles,
                        target_min_grade_pct=args.min_grade,
@@ -267,6 +311,10 @@ def live_probes(args):
     lat,lon = START
     delta = args.bbox_degrees
     bbox = (lat-delta,lon-delta,lat+delta,lon+delta)
+    try:
+        bbox = consts.ELEVATION_BBOX
+    except:
+        pass
     with OSMConnector(cache_dir=args.cache_dir) as osm:
         graph = osm.get_road_graph(bbox)
     if not graph.number_of_nodes():
@@ -281,7 +329,8 @@ def live_probes(args):
     probes = [
         ('Rock Springs SW',225,'Rock Springs'),
         ('Rock Springs NE',45,'Rock Springs'),
-        ('Moreland Drive (initial heading guess)',300,'Moreland'),
+        ('Moreland Drive NW',310,'Moreland'),
+        ('Moreland Drive NW',130,'Moreland'),
     ]
     routes = []
     for name, heading, road in probes:
@@ -297,14 +346,9 @@ def live_probes(args):
         } 
         for n in nodes
     ]
-    lec = LocalElevationConnector()
-    lat_long_needed = lec.filter_lat_long_return_missing_coords(lat_long_on_path)
-    with ElevationConnector(
-        batch_size=args.batch_size,
-        api_key=os.environ.get("OPEN_ELEVATION_API_KEY")
-    ) as ec:
-        results = ec.fetch_elevation_for_coords()
-    elevations = {n:float(r['elevation']) for n,r in zip(nodes,results)}
+    
+    elevations = get_elevations_on_path(graph, nodes, lat_long_on_path)
+    
     reports = []
     for name,path in routes:
         profile = profile_from_path(graph,path,elevations)
