@@ -17,6 +17,8 @@ import unittest
 from dataclasses import asdict
 from pathlib import Path
 
+import numpy as np
+
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
@@ -269,14 +271,14 @@ def get_elevations_on_path(graph, nodes, lat_long_on_path):
     ][["latitude", "longitude", "elevation"]].to_dict(orient="records")
 
     # Fetch only coordinates missing from the local cache
-    # if len(lat_long_needed) > 0:
-    #     with ElevationConnector(
-    #         batch_size=args.batch_size,
-    #         api_key=os.environ.get("OPEN_ELEVATION_API_KEY")
-    #     ) as ec:
-    #         results = ec.fetch_elevation_for_coords(lat_long_needed)
+    if len(lat_long_needed) > 0:
+        with ElevationConnector(
+            batch_size=args.batch_size,
+            api_key=os.environ.get("OPEN_ELEVATION_API_KEY")
+        ) as ec:
+            results = ec.fetch_elevation_for_coords(lat_long_needed)
 
-    #     elevation_data.extend(results)
+        elevation_data.extend(results)
 
     print(f"Total road coordinates: {len(lat_long_on_path):,}")
     print(f"Cached elevations: {len(elevation_data) - len(lat_long_needed):,}")
@@ -294,9 +296,9 @@ def get_elevations_on_path(graph, nodes, lat_long_on_path):
         for n in nodes
     }
     
-    elevation_on_path = {n:float(r['elevation']) for n,r in zip(nodes, elevations)}
+    # elevation_on_path = {n:float(r['elevation']) for n,r in zip(nodes, elevations)}
     
-    return elevation_on_path
+    return elevations
 
 def live_probes(args):
     from core.road_network import OSMConnector
@@ -370,10 +372,10 @@ if __name__ == '__main__':
     parser.add_argument('--min-miles',type=float,default=2.0)
     parser.add_argument('--min-grade',type=float,default=1.0)
     parser.add_argument('--max-grade',type=float,default=2.0)
-    parser.add_argument('--max-short-grade',type=float,default=4.0)
+    parser.add_argument('--max-short-grade',type=float,default=np.inf)
     parser.add_argument('--max-rolling-grade',type=float,default=3.0)
     parser.add_argument('--excursion-m',type=float,default=150.0)
-    parser.add_argument('--excursion-fraction',type=float,default=0.15)
+    parser.add_argument('--excursion-fraction',type=float,default=np.inf)
     parser.add_argument('--bbox-degrees',type=float,default=0.065)
     parser.add_argument('--batch-size',type=int,default=250)
     parser.add_argument('--cache-dir',default='cache/osm')

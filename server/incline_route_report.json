@@ -1,0 +1,487 @@
+{
+  "spec": {
+    "min_distance_miles": 2.0,
+    "target_min_grade_pct": 1.0,
+    "target_max_grade_pct": 2.0,
+    "max_short_grade_pct": Infinity,
+    "max_excursion_m": 150.0,
+    "max_excursion_fraction": Infinity,
+    "min_uphill_fraction": 0.75,
+    "rolling_window_m": 200.0,
+    "max_rolling_grade_pct": 3.0,
+    "max_turn_deg": 65.0,
+    "max_start_distance_m": 125.0
+  },
+  "reports": [
+    {
+      "route": "Rock Springs SW",
+      "passes": false,
+      "nodes": 144,
+      "target_grade_range_pct": [
+        1.0,
+        2.0
+      ],
+      "qualification": {
+        "reason": "failed_checks",
+        "distance_m": 3218.7,
+        "net_grade_pct": 1.802,
+        "max_segment_grade_pct": 138.428,
+        "max_rolling_grade_pct": 14.562,
+        "longest_excursion_m": 3218.7,
+        "excursion_fraction": 1.0,
+        "uphill_fraction": 0.115,
+        "checks": {
+          "net_grade": true,
+          "max_segment_grade": true,
+          "longest_excursion": false,
+          "excursion_fraction": true,
+          "uphill_fraction": false,
+          "rolling_grade": false
+        }
+      },
+      "starting_coordinates": [
+        36.4884819,
+        -82.5274653
+      ],
+      "ending_coordinates": [
+        36.4627696,
+        -82.5552517
+      ],
+      "starting_road": "Rock Springs Road",
+      "total_miles": 2.402,
+      "overall_grade_pct": 1.604,
+      "max_grade_pct": 138.428,
+      "min_grade_pct": -89.016,
+      "qualifying_target_miles": 0.0,
+      "qualifying_target_fraction": 0.0,
+      "out_of_target_miles": 2.402,
+      "road_sections": [
+        {
+          "road": "Rock Springs Road",
+          "start_coordinate": [
+            36.4884819,
+            -82.5274653
+          ],
+          "end_coordinate": [
+            36.4627696,
+            -82.5552517
+          ],
+          "length_miles": 2.402,
+          "overall_grade_pct": 1.604,
+          "start_mile": 0.0,
+          "end_mile": 2.402
+        }
+      ],
+      "road_changes": [],
+      "failed_sections": [
+        {
+          "road": "Rock Springs Road",
+          "start_coordinate": [
+            36.4884819,
+            -82.5274653
+          ],
+          "end_coordinate": [
+            36.4627696,
+            -82.5552517
+          ],
+          "max_grade_pct": 138.428,
+          "min_grade_pct": -89.016,
+          "length_m": 3866.1,
+          "length_miles": 2.402,
+          "overall_grade_pct": 1.604,
+          "start_mile": 0.0,
+          "end_mile": 2.402
+        }
+      ]
+    },
+    {
+      "route": "Rock Springs NE",
+      "passes": false,
+      "nodes": 256,
+      "target_grade_range_pct": [
+        1.0,
+        2.0
+      ],
+      "qualification": {
+        "reason": "failed_checks",
+        "distance_m": 3218.7,
+        "net_grade_pct": 0.441,
+        "max_segment_grade_pct": 94.815,
+        "max_rolling_grade_pct": 14.5,
+        "longest_excursion_m": 3218.7,
+        "excursion_fraction": 1.0,
+        "uphill_fraction": 0.114,
+        "checks": {
+          "net_grade": false,
+          "max_segment_grade": true,
+          "longest_excursion": false,
+          "excursion_fraction": true,
+          "uphill_fraction": false,
+          "rolling_grade": false
+        }
+      },
+      "starting_coordinates": [
+        36.4884819,
+        -82.5274653
+      ],
+      "ending_coordinates": [
+        36.539596,
+        -82.5349839
+      ],
+      "starting_road": "Rock Springs Road",
+      "total_miles": 4.424,
+      "overall_grade_pct": -0.167,
+      "max_grade_pct": 201.713,
+      "min_grade_pct": -102.32,
+      "qualifying_target_miles": 0.276,
+      "qualifying_target_fraction": 0.0623,
+      "out_of_target_miles": 4.148,
+      "road_sections": [
+        {
+          "road": "Rock Springs Road",
+          "start_coordinate": [
+            36.4884819,
+            -82.5274653
+          ],
+          "end_coordinate": [
+            36.497846,
+            -82.5127429
+          ],
+          "length_miles": 1.094,
+          "overall_grade_pct": -1.364,
+          "start_mile": 0.0,
+          "end_mile": 1.094
+        },
+        {
+          "road": "Fort Henry Drive",
+          "start_coordinate": [
+            36.497846,
+            -82.5127429
+          ],
+          "end_coordinate": [
+            36.539596,
+            -82.5349839
+          ],
+          "length_miles": 3.33,
+          "overall_grade_pct": 0.227,
+          "start_mile": 1.094,
+          "end_mile": 4.424
+        }
+      ],
+      "road_changes": [
+        {
+          "at_mile": 1.094,
+          "coordinate": [
+            36.497846,
+            -82.5127429
+          ],
+          "from_road": "Rock Springs Road",
+          "to_road": "Fort Henry Drive"
+        }
+      ],
+      "failed_sections": [
+        {
+          "road": "Rock Springs Road",
+          "start_coordinate": [
+            36.4884819,
+            -82.5274653
+          ],
+          "end_coordinate": [
+            36.497846,
+            -82.5127429
+          ],
+          "max_grade_pct": 43.059,
+          "min_grade_pct": -102.32,
+          "length_m": 1760.1,
+          "length_miles": 1.094,
+          "overall_grade_pct": -1.364,
+          "start_mile": 0.0,
+          "end_mile": 1.094
+        },
+        {
+          "road": "Fort Henry Drive",
+          "start_coordinate": [
+            36.497846,
+            -82.5127429
+          ],
+          "end_coordinate": [
+            36.53656255106902,
+            -82.53169457179722
+          ],
+          "max_grade_pct": 201.713,
+          "min_grade_pct": -72.079,
+          "length_m": 4911.5,
+          "length_miles": 3.052,
+          "overall_grade_pct": 0.086,
+          "start_mile": 1.094,
+          "end_mile": 4.146
+        },
+        {
+          "road": "Fort Henry Drive",
+          "start_coordinate": [
+            36.5381372,
+            -82.533361
+          ],
+          "end_coordinate": [
+            36.5381623,
+            -82.5333883
+          ],
+          "max_grade_pct": 16.446,
+          "min_grade_pct": 16.446,
+          "length_m": 3.7,
+          "length_miles": 0.002,
+          "overall_grade_pct": 16.446,
+          "start_mile": 4.288,
+          "end_mile": 4.291
+        }
+      ]
+    },
+    {
+      "route": "Moreland Drive NW",
+      "passes": false,
+      "nodes": 129,
+      "target_grade_range_pct": [
+        1.0,
+        2.0
+      ],
+      "qualification": {
+        "reason": "failed_checks",
+        "distance_m": 3218.7,
+        "net_grade_pct": -1.056,
+        "max_segment_grade_pct": 56.544,
+        "max_rolling_grade_pct": 10.0,
+        "longest_excursion_m": 3218.7,
+        "excursion_fraction": 1.0,
+        "uphill_fraction": 0.123,
+        "checks": {
+          "net_grade": false,
+          "max_segment_grade": true,
+          "longest_excursion": false,
+          "excursion_fraction": true,
+          "uphill_fraction": false,
+          "rolling_grade": false
+        }
+      },
+      "starting_coordinates": [
+        36.4884819,
+        -82.5274653
+      ],
+      "ending_coordinates": [
+        36.5180486,
+        -82.555187
+      ],
+      "starting_road": "Moreland Drive",
+      "total_miles": 2.699,
+      "overall_grade_pct": -0.783,
+      "max_grade_pct": 138.212,
+      "min_grade_pct": -79.478,
+      "qualifying_target_miles": 0.0,
+      "qualifying_target_fraction": 0.0,
+      "out_of_target_miles": 2.699,
+      "road_sections": [
+        {
+          "road": "Moreland Drive",
+          "start_coordinate": [
+            36.4884819,
+            -82.5274653
+          ],
+          "end_coordinate": [
+            36.5180486,
+            -82.555187
+          ],
+          "length_miles": 2.699,
+          "overall_grade_pct": -0.783,
+          "start_mile": 0.0,
+          "end_mile": 2.699
+        }
+      ],
+      "road_changes": [],
+      "failed_sections": [
+        {
+          "road": "Moreland Drive",
+          "start_coordinate": [
+            36.4884819,
+            -82.5274653
+          ],
+          "end_coordinate": [
+            36.5180486,
+            -82.555187
+          ],
+          "max_grade_pct": 138.212,
+          "min_grade_pct": -79.478,
+          "length_m": 4343.7,
+          "length_miles": 2.699,
+          "overall_grade_pct": -0.783,
+          "start_mile": 0.0,
+          "end_mile": 2.699
+        }
+      ]
+    },
+    {
+      "route": "Moreland Drive NW",
+      "passes": false,
+      "nodes": 124,
+      "target_grade_range_pct": [
+        1.0,
+        2.0
+      ],
+      "qualification": {
+        "reason": "failed_checks",
+        "distance_m": 3218.7,
+        "net_grade_pct": 2.237,
+        "max_segment_grade_pct": 225.838,
+        "max_rolling_grade_pct": 27.023,
+        "longest_excursion_m": 3218.7,
+        "excursion_fraction": 1.0,
+        "uphill_fraction": 0.161,
+        "checks": {
+          "net_grade": false,
+          "max_segment_grade": true,
+          "longest_excursion": false,
+          "excursion_fraction": true,
+          "uphill_fraction": false,
+          "rolling_grade": false
+        }
+      },
+      "starting_coordinates": [
+        36.4884819,
+        -82.5274653
+      ],
+      "ending_coordinates": [
+        36.5037262,
+        -82.4907831
+      ],
+      "starting_road": "Moreland Drive",
+      "total_miles": 2.776,
+      "overall_grade_pct": 0.381,
+      "max_grade_pct": 225.838,
+      "min_grade_pct": -146.87,
+      "qualifying_target_miles": 0.0,
+      "qualifying_target_fraction": 0.0,
+      "out_of_target_miles": 2.776,
+      "road_sections": [
+        {
+          "road": "Moreland Drive",
+          "start_coordinate": [
+            36.4884819,
+            -82.5274653
+          ],
+          "end_coordinate": [
+            36.4898805,
+            -82.5060077
+          ],
+          "length_miles": 1.486,
+          "overall_grade_pct": 0.752,
+          "start_mile": 0.0,
+          "end_mile": 1.486
+        },
+        {
+          "road": "Hemlock Road",
+          "start_coordinate": [
+            36.4898805,
+            -82.5060077
+          ],
+          "end_coordinate": [
+            36.5023001,
+            -82.4919873
+          ],
+          "length_miles": 1.17,
+          "overall_grade_pct": -0.212,
+          "start_mile": 1.486,
+          "end_mile": 2.656
+        },
+        {
+          "road": "Waterside Private Drive",
+          "start_coordinate": [
+            36.5023001,
+            -82.4919873
+          ],
+          "end_coordinate": [
+            36.5037262,
+            -82.4907831
+          ],
+          "length_miles": 0.119,
+          "overall_grade_pct": 1.565,
+          "start_mile": 2.656,
+          "end_mile": 2.776
+        }
+      ],
+      "road_changes": [
+        {
+          "at_mile": 1.486,
+          "coordinate": [
+            36.4898805,
+            -82.5060077
+          ],
+          "from_road": "Moreland Drive",
+          "to_road": "Hemlock Road"
+        },
+        {
+          "at_mile": 2.656,
+          "coordinate": [
+            36.5023001,
+            -82.4919873
+          ],
+          "from_road": "Hemlock Road",
+          "to_road": "Waterside Private Drive"
+        }
+      ],
+      "failed_sections": [
+        {
+          "road": "Moreland Drive",
+          "start_coordinate": [
+            36.4884819,
+            -82.5274653
+          ],
+          "end_coordinate": [
+            36.4898805,
+            -82.5060077
+          ],
+          "max_grade_pct": 70.867,
+          "min_grade_pct": -61.391,
+          "length_m": 2392.2,
+          "length_miles": 1.486,
+          "overall_grade_pct": 0.752,
+          "start_mile": 0.0,
+          "end_mile": 1.486
+        },
+        {
+          "road": "Hemlock Road",
+          "start_coordinate": [
+            36.4898805,
+            -82.5060077
+          ],
+          "end_coordinate": [
+            36.5023001,
+            -82.4919873
+          ],
+          "max_grade_pct": 225.838,
+          "min_grade_pct": -146.87,
+          "length_m": 1882.9,
+          "length_miles": 1.17,
+          "overall_grade_pct": -0.212,
+          "start_mile": 1.486,
+          "end_mile": 2.656
+        },
+        {
+          "road": "Waterside Private Drive",
+          "start_coordinate": [
+            36.5023001,
+            -82.4919873
+          ],
+          "end_coordinate": [
+            36.5037262,
+            -82.4907831
+          ],
+          "max_grade_pct": 6.261,
+          "min_grade_pct": 0.0,
+          "length_m": 191.7,
+          "length_miles": 0.119,
+          "overall_grade_pct": 1.565,
+          "start_mile": 2.656,
+          "end_mile": 2.776
+        }
+      ]
+    }
+  ]
+}
